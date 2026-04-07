@@ -116,8 +116,10 @@ ul{list-style:none}
 .M{font-family:'DM Sans',system-ui,sans-serif;--bg:#08090d;--fg:#ebeef5;--card:#101118;--brd:#262833;--mut:#7a808d;--pri:#8191ff;--grn:#22c55e;background:var(--bg);color:var(--fg);min-height:100vh}
 
 /* Topbar */
-.Mt{background:#101118;padding:4px 16px;display:flex;flex-direction:column;position:sticky;top:0;z-index:100}
-.Mtr{display:flex;align-items:center;justify-content:space-between;padding:2px 0}
+.Mt{background:#101118;padding:4px 16px;position:sticky;top:0;z-index:100}
+.Mclose{position:fixed;top:16px;right:16px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.1);color:#ebeef5;display:flex;align-items:center;justify-content:center;z-index:200;transition:all .2s;cursor:pointer}
+.Mclose:hover{background:rgba(255,255,255,.2);transform:scale(1.1)}
+.Mclose svg{width:20px;height:20px}
 .Mtl{display:flex;align-items:center;gap:12px}
 .Mbk{color:var(--mut);font-size:13px;font-weight:500;display:flex;align-items:center;gap:4px;padding:6px 10px;border-radius:8px;transition:all .15s}
 .Mbk:hover{background:rgba(255,255,255,.05);color:var(--fg)}
@@ -332,12 +334,8 @@ ul{list-style:none}
 
 <!-- ====================== SCREEN 2: MY AI TUTOR ====================== -->
 <div class="screen M" id="s2">
+<button class="Mclose" onclick="bk()"><svg fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18" transform="translate(-2,-2)"/></svg></button>
 <div class="Mt">
- <div class="Mtr">
-  <div class="Mtl">
-    <button class="Mbk" onclick="bk()"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 1L3 6l5 5"/></svg> Назад</button>
-  </div>
- </div>
  <div class="Mtb">
   <button class="Mtbi ac"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M5 7h6M5 9.5h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Условие</button>
   <button class="Mtbi"><svg viewBox="0 0 16 16" fill="none"><path d="M5 3l-3 5 3 5M11 3l3 5-3 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Python</button>
