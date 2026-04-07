@@ -1,0 +1,5 @@
+.playwright-mcp/
+*.png
+favicon_b64.txt
+egehub/
+myAITutor/

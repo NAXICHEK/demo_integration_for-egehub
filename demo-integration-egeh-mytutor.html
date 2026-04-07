@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EGE Hub × My AI Tutor — Демо интеграции</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-font-smoothing:antialiased;font-family:'Inter',system-ui,-apple-system,sans-serif}
+body{overflow-x:hidden;color:#3c2c29}
+button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:inherit}
+input,select{font-family:inherit;outline:none}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+.screen{display:none;min-height:100vh}.screen.on{display:block}.screen.on2{display:block}
+.fo{animation:fo .3s ease forwards}.fi{animation:fi .35s ease forwards}
+@keyframes fo{to{opacity:0;transform:translateY(-8px)}}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+
+/* ======================== EGE HUB ======================== */
+.E{background:#FAF6F5;min-height:100vh}
+
+/* Header */
+.Eh{background:#fff;border-bottom:1px solid #F5EEEC;height:72px;position:sticky;top:0;z-index:100}
+.Ehi{max-width:1280px;margin:0 auto;padding:0 32px;height:100%;display:flex;align-items:center;gap:24px}
+.Elo{width:160px;height:56px;flex-shrink:0}
+.Elo svg{width:100%;height:100%}
+.Esub{font-size:10px;color:#776865;margin-top:-4px;margin-left:68px;font-weight:500;letter-spacing:.5px}
+.Env{display:flex;gap:16px;align-items:center}
+.Env a{font-weight:500;font-size:15px;color:#3c2c29;white-space:nowrap;transition:color .2s}
+.Env a:hover,.Env a.ac{color:#FF5E3A}
+.Eph{font-weight:500;font-size:15px;color:#3c2c29;margin-left:auto;white-space:nowrap}
+.Ebs{display:flex;gap:8px;align-items:center;margin-left:auto}
+.Ecart{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 1px 1px #F5EEEC;color:#3c2c29;transition:background .2s}
+.Ecart:hover{background:#FAF6F5}
+.Elogin{background:#3c2c29;color:#fff;border-radius:12px;height:40px;padding:0 16px;font-weight:500;font-size:15px;display:flex;align-items:center;transition:background .2s}
+.Elogin:hover{background:#776865}
+
+/* Sidebar + Main grid */
+.Egrid{max-width:1280px;margin:0 auto;padding:24px 32px 48px;display:grid;grid-template-columns:240px 1fr;gap:32px}
+.Eside{display:flex;flex-direction:column;gap:4px}
+.Esi{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;font-size:15px;font-weight:500;color:#776865;transition:all .15s;cursor:pointer}
+.Esi:hover{background:#F5EEEC;color:#3c2c29}
+.Esi.ac{background:#fff;color:#3c2c29;box-shadow:0 2px 16px -2px rgba(126,112,109,.08)}
+.Esi svg{width:20px;height:20px;flex-shrink:0;color:inherit;opacity:.6}
+
+/* Main content */
+.Emain{min-width:0}
+.Etit{font-weight:700;font-size:22px;line-height:1.3;margin-bottom:20px}
+
+/* Filters */
+.Efr1{display:flex;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.Etog{display:inline-flex;border:1px solid #E4DAD8;border-radius:12px;overflow:hidden;background:#FAF6F5}
+.Etog button{height:40px;width:80px;font-weight:500;font-size:15px;color:#776865;transition:all .2s;border-radius:11px}
+.Etog button.ac{background:#fff;color:#3c2c29;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.Esel{height:40px;padding:0 14px;border:1px solid #F5EEEC;border-radius:12px;font-size:14px;font-weight:500;color:#3c2c29;background:#fff;min-width:140px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23A89C9A' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.Esch{height:40px;padding:0 12px;border:1px solid #F5EEEC;border-radius:12px;font-size:14px;color:#3c2c29;background:#fff;flex:1;min-width:120px}
+.Esch::placeholder{color:#CEC3C0}
+.Ebshow{height:40px;padding:0 24px;background:#3c2c29;color:#fff;border-radius:12px;font-weight:500;font-size:15px;transition:background .2s}
+.Ebshow:hover{background:#776865}
+.Efr2{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.Efd{font-size:14px;font-weight:500;color:#3c2c29;display:flex;align-items:center;gap:4px;padding:6px 0;cursor:pointer}
+.Efd svg{width:12px;height:12px;color:#A89C9A}
+
+/* Banner */
+.Eban{display:flex;align-items:center;gap:12px;background:#FEF5EE;border:1px solid #F0E4D0;border-radius:12px;padding:14px 20px;margin-bottom:20px;font-size:14px;color:#776865}
+.Eban .x{margin-left:auto;cursor:pointer;color:#A89C9A;font-size:18px}
+
+/* Cards */
+.Ecards{display:flex;flex-direction:column;gap:20px}
+.Ecard{background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 16px -2px rgba(126,112,109,.08)}
+.Ect{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.Ectl{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.Ebg{height:28px;padding:5px 13px;border-radius:32px;font-size:14px;font-weight:500;display:inline-flex;align-items:center;color:#3c2c29}
+.Ebg.num{background:#f5eeec}.Ebg.tag{background:#fff;border:1px solid #e4dad8}
+.Erep{display:flex;align-items:center;gap:4px;font-size:13px;color:#CEC3C0;font-weight:500}
+.Erep svg{width:14px;height:14px}
+.Ecat{font-size:16px;font-weight:500;color:#A89C9A;margin-bottom:12px}
+.Etxt{font-size:16px;line-height:22px;font-weight:500;color:#3c2c29;margin-bottom:12px}
+.Etxt p{margin-bottom:8px}
+.Etxt strong{font-weight:700}
+.Efiles{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.Efile{display:flex;align-items:center;gap:8px;height:40px;padding:0 13px 0 9px;border:1px solid #f5eeec;border-radius:12px;font-size:15px;font-weight:500;color:#3c2c29;cursor:pointer;box-shadow:0 2px 16px -2px rgba(126,112,109,.08)}
+.Efile svg{width:24px;height:24px;color:#A89C9A}
+.Etbl{border:2px solid #F5EEEC;border-radius:16px;overflow:hidden;margin-bottom:16px;display:inline-block;box-shadow:0 2px 16px -2px rgba(126,112,109,.08)}
+.Etbl table{border-collapse:collapse}
+.Etbl td{width:96px;height:48px;padding:0 13px;font-size:16px;font-weight:500;vertical-align:middle;border-bottom:1px solid #F5EEEC}
+.Etbl td.hd{background:#FAF6F5;border-right:2px solid #F5EEEC}
+.Etbl td input{border:0;background:transparent;width:100%;height:100%;font-size:16px;font-weight:500;color:#3c2c29}
+.Etbl td input::placeholder{color:#CEC3C0}
+.Etbl tr:last-child td{border-bottom:0}
+.Ecf{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.Ebtn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;padding:12px 16px;font-weight:500;font-size:16px;transition:all .2s}
+.Eblk{background:#3c2c29;color:#fff}.Eblk:hover{background:#776865}.Eblk:disabled{opacity:.3;pointer-events:none}
+.Eout{color:#3c2c29;box-shadow:inset 0 0 1px 1px #F5EEEC}.Eout:hover{background:#FAF6F5}
+.Eai{background:linear-gradient(135deg,#7f22fe,#a855f7);color:#fff;border-radius:12px;padding:12px 20px;font-weight:600;font-size:15px;box-shadow:0 2px 12px rgba(127,34,254,.25);transition:all .3s;margin-left:auto}
+.Eai:hover{box-shadow:0 4px 20px rgba(127,34,254,.35);transform:translateY(-1px)}
+
+/* Footer */
+.Eft{border-top:1px solid #F5EEEC;background:#fff;padding:48px 0 40px}
+.Efti{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.Efcl{display:flex;flex-direction:column;gap:12px}
+.Efcl a{font-weight:500;font-size:20px;color:#3c2c29;transition:color .2s}.Efcl a:hover{color:#FF5E3A}
+.Eft2{color:#776865;font-size:12px;font-weight:500;margin-top:8px;line-height:1.4}
+.Eft3{color:#A89C9A;font-size:12px;margin-top:4px}
+.Efnv{display:flex;flex-wrap:wrap;gap:32px}
+.Efnc h4{font-size:14px;font-weight:600;color:#776865;margin-bottom:16px}
+.Efnc ul{display:flex;flex-direction:column;gap:11px}
+.Efnc a{font-size:14px;font-weight:500;color:#3c2c29;transition:color .2s}.Efnc a:hover{color:#FF5E3A}
+.Efsc{display:flex;gap:8px;margin-top:8px}
+.Efsc a{width:32px;height:32px;border-radius:8px;background:#3c2c29;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.Efsc a:hover{background:#FF5E3A}
+.Efsc svg{width:14px;height:14px;fill:#FAF6F5}
+
+/* ======================== MY AI TUTOR ======================== */
+.M{font-family:'DM Sans',system-ui,sans-serif;--bg:#08090d;--fg:#ebeef5;--card:#101118;--brd:#262833;--mut:#7a808d;--pri:#8191ff;--grn:#22c55e;background:var(--bg);color:var(--fg);min-height:100vh}
+
+/* Topbar */
+.Mt{background:#101118;padding:8px 16px;display:flex;flex-direction:column;position:sticky;top:0;z-index:100}
+.Mtr{display:flex;align-items:center;justify-content:space-between;padding:4px 8px}
+.Mtl{display:flex;align-items:center;gap:12px}
+.Mbk{color:var(--mut);font-size:13px;font-weight:500;display:flex;align-items:center;gap:4px;padding:6px 10px;border-radius:8px;transition:all .15s}
+.Mbk:hover{background:rgba(255,255,255,.05);color:var(--fg)}
+.Mla{display:flex;align-items:center;gap:8px;cursor:pointer}
+.Mla img{width:24px;height:24px;border-radius:6px}
+.Mla span{font-weight:800;font-size:18px;letter-spacing:-.45px}
+.Lmy,.Ltu{color:#90a1b9}.Lai{color:#8e51ff}
+.Mna{display:flex;align-items:center;gap:4px}
+.Mnarr{width:36px;height:36px;border-radius:20px;background:rgba(255,255,255,.05);color:#90a1b9;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background .15s;opacity:.3}
+.Mnarr:hover{background:rgba(255,255,255,.1);opacity:1}
+.Mnc{font-size:12px;color:#90a1b9;display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;background:rgba(255,255,255,.05);box-shadow:0 0 0 1px rgba(255,255,255,.1)}
+.Mncur{color:#c4b4ff;font-weight:600;font-size:16px}
+.Mtc{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.05);padding:6px 16px;border-radius:9999px}
+.Mtp{display:inline-flex;padding:4px 12px;border-radius:9999px;font-size:12px;font-weight:600;background:linear-gradient(to right,rgba(127,34,254,.9),rgba(225,42,251,.9));color:#fff}
+.Mtt{font-size:14px;font-weight:600;color:#e2e8f0}
+.Mdf{font-size:12px;color:#FFB900;display:flex;align-items:center;gap:4px}
+.Mdf svg{width:12px;height:12px;fill:currentColor}
+.Mtr2{display:flex;align-items:center;gap:12px}
+.Mib{width:36px;height:36px;border-radius:20px;background:rgba(255,255,255,.05);color:#90a1b9;display:flex;align-items:center;justify-content:center;transition:all .15s;opacity:.5}
+.Mib:hover{background:rgba(255,255,255,.1);opacity:1}
+.Mib svg{width:16px;height:16px}
+.Mav{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);color:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;box-shadow:0 0 0 2px rgba(142,81,255,.3)}
+
+/* Tabs */
+.Mtb{display:flex;flex-wrap:wrap;gap:4px;padding:8px 16px;border-top:1px solid rgba(255,255,255,.06);background:#101118}
+.Mtbi{padding:6px 12px;border-radius:9999px;font-size:14px;font-weight:500;color:#62748e;display:flex;align-items:center;gap:8px;transition:all .15s}
+.Mtbi:hover{color:var(--fg)}
+.Mtbi.ac{background:rgba(127,34,254,.9);color:#fff}
+.Mtbi svg{width:16px;height:16px;opacity:.7}
+
+/* Body */
+.Mbd{display:flex;flex-direction:column;padding:16px 24px;gap:16px}
+.Mpn{background:var(--card);border-radius:16px;border:1px solid rgba(255,255,255,.08);overflow:hidden}
+.Mlb{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--mut);padding:0 16px;display:flex;align-items:center;gap:12px;margin-bottom:-1px}
+.Mlb::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.06)}
+.Mcn{padding:16px}
+.Mcnh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.Mcnt{font-size:22px;font-weight:700}
+.Mcna{display:flex;gap:16px}
+.Mcnab{font-size:12px;color:var(--mut);display:flex;align-items:center;gap:4px;cursor:pointer}.Mcnab:hover{color:var(--fg)}
+.Mctx{font-size:14px;line-height:1.7;opacity:.9}
+.Mans{display:flex;flex-direction:column;gap:16px;margin-top:20px}
+.Mans-row{display:flex;align-items:center;gap:12px}
+.Mainp{width:100%;max-width:520px;padding:14px 20px;border-radius:12px;border:1px solid var(--brd);background:rgba(255,255,255,.02);color:var(--fg);font-size:15px;font-family:inherit;text-align:center}
+.Mainp::placeholder{color:var(--mut)}.Mainp:focus{border-color:var(--pri)}
+.Mchk{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:8px;background:var(--grn);color:#fff;font-size:13px;font-weight:600}
+.Mchk:hover{opacity:.85}
+.Msho{font-size:13px;color:var(--mut);display:flex;align-items:center;gap:6px;padding:10px 14px}.Msho:hover{color:var(--fg)}
+
+/* Solution */
+.Msol{padding:12px 16px}
+.Msols{font-size:13px;color:var(--mut);margin:4px 0 8px}
+.Msolb{padding:8px 16px;border-radius:10px;border:1px solid var(--brd);color:var(--fg);font-size:14px;font-weight:500;background:transparent}.Msolb:hover{background:rgba(255,255,255,.05)}
+
+/* Editor */
+.Med{min-height:400px;display:flex;flex-direction:column}
+.Medh{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:1px solid var(--brd)}
+.Medt{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600}
+.Medt svg{width:16px;height:16px;color:var(--pri)}
+.Medg{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:500;color:var(--grn)}
+.Medg::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--grn);display:inline-block}
+.Medtb{display:flex;align-items:center;gap:6px}
+.Medb{width:30px;height:30px;border-radius:6px;background:rgba(255,255,255,.05);color:var(--mut);display:flex;align-items:center;justify-content:center}.Medb:hover{background:rgba(255,255,255,.1)}
+.Medb svg{width:14px;height:14px}
+.Mrun{width:34px;height:34px;border-radius:50%;background:var(--grn);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(34,197,94,.3)}.Mrun:hover{transform:scale(1.06)}
+.Mslv{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:8px;background:var(--pri);color:#fff;font-size:12px;font-weight:600;box-shadow:0 2px 8px rgba(129,145,255,.25)}
+.Medy{flex:1;display:flex;min-height:0}
+.Mfs{width:140px;border-right:1px solid var(--brd);padding:8px}
+.Mfst{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);padding:4px 8px;display:flex;align-items:center;justify-content:space-between}
+.Mfi{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;font-size:12px;color:var(--fg);cursor:pointer}
+.Mfi.ac{background:rgba(129,145,255,.15);color:#a8b8ff}
+.Mfic{width:14px;height:14px;border-radius:3px;background:var(--grn);display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff;font-weight:700}
+.Mco{flex:1;background:#282c34;padding:12px;font-family:'Cascadia Code','Fira Code',monospace;font-size:13px;line-height:1.65;overflow:auto;color:#abb2bf}
+.Mcl{display:flex;gap:12px}.Mln{color:#636d83;min-width:20px;text-align:right;user-select:none}
+.kw{color:#c678dd}.fn{color:#61afef}.st{color:#98c379}.pr{color:#e5c07b}.cm{color:#5c6370;font-style:italic}
+
+/* Chatbar */
+.Mcb{padding:10px 24px;display:flex;align-items:center;gap:10px;border-top:1px solid var(--brd);position:sticky;bottom:0;background:var(--bg);z-index:50}
+.Mc5{width:28px;height:28px;border-radius:50%;background:var(--grn);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.Mcbi{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:14px;flex-shrink:0}
+.Mcbi svg{width:16px;height:16px}
+.Mcinp{flex:1;padding:10px 14px;border-radius:10px;border:1px solid var(--brd);background:rgba(255,255,255,.03);color:var(--fg);font-size:13px;font-family:inherit}
+.Mcinp::placeholder{color:var(--mut)}.Mcinp:focus{border-color:var(--pri)}
+.Mcsnd{width:32px;height:32px;border-radius:8px;background:var(--pri);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}.Mcsnd:hover{opacity:.85}
+
+/* Chat widget */
+.Mwid{position:fixed;bottom:20px;right:20px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#7f22fe,#a855f7);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(127,34,254,.4);cursor:pointer;z-index:200;display:none}
+.M .Mwid{display:flex}
+</style>
+</head>
+<body>
+
+<!-- ====================== SCREEN 1: EGE HUB ====================== -->
+<div class="screen E on" id="s1">
+<header class="Eh"><div class="Ehi">
+  <div>
+    <svg class="Elo" viewBox="0 0 196 64" fill="none"><path d="M22.28 14.6s-1.13.03-2.59.3c.14-.46.32-.84.51-.95.43-.3 1.97-.46 2.88-.51l-.05-1.4c-.43.03-2.67.13-3.58.73-.75.48-1.13 1.72-1.27 2.48-.94.27-1.91.62-2.72 1.16-1.24.81-3.37 4.55-5.17 8.81-.59-.08-1.27-.1-1.54.16-.51.51-2.94 7.57-2.67 8.24.14.32.67.62 1.24.84-.24 1.37-.3 2.53-.08 3.36 1.13 4.63 8.35 5.41 8.35 5.41l5.74-18L29.09 30.65l2.4-6.06L22.28 14.6z" fill="#000"/><path d="M4.88 35.56s-1.73 1.37-1.73 4.12c0 2.75 3.66 8.08 12.44 3.58 0 0-.83-11.37 1.29-14.92 1.19-1.99 2.53-3.18 3.48-3.85.81-.57 1.89-.48 2.59.19.94.92 1.97 2.29 2.72 3.37.57.81 1.73.97 2.51.32l1.7-1.43c.65-.57.81-1.51.32-2.24-1.43-2.21-4.55-6.63-7.54-8.05 0 0-1.05-2.32.41-5.23l5.93 5.39s-3.29-10.13 2.02-16.81c2.72 1.21 4.53 5.17 4.53 5.17s1.51-2.94 2.59-3.53c.75.49 2.53 3.02 2.53 3.02s8.05 3.68 10.64 8.18c3.64 6.81 7.49 4.23 10.59 7.27 2.26 1.91.67 9.73-2.32 9.73-14.71 0-22.84-7.89-22.84-7.89s.27 5.55 1.97 7.41c0 0-4.39-1.32-5.93-4.79 0 0-1.13 7.03 1.64 9.97 3.64 3.85.08 8.57-5.74 8.57 0 0 1.64 7.95 6.6 7.95s11.87-2.42 10.07-15.54c0 0 6.11-2.06 8.35-2.77 2.21-.7 3.8 2.8 1.56 5.63-2.24 2.83-6.63 9.05-6.63 10.42 0 1.4.38 1.83 1.43 1.83s.92-1.27 2.21-1.27 1.99 1.16 1.99 2.72c0 2.05-3.48 7.65-9.24 7.65-5.76 0-6.14-2.83-8.78-2.83s-9.54 7.03-8.86 8.08c.67 1.05.59 3.05-1.99 3.05-5.36 0-7.89-6.17-7.89-6.17-7.03 0-17.62-5.31-17.62-16.43 0-5.41 4.88-5.84 4.88-5.84z" fill="#FF5E3A"/><circle cx="56.32" cy="20.69" r=".85" fill="#000"/><circle cx="59.31" cy="20.82" r=".36" fill="#000"/><path d="M43.18 16.78c1.29 0 2.64-.46 3.61-.89.89-.4 1.27-1.45.84-2.32-1.02-1.8-2.7-4.58-4.98-4.58-3.37 0-4.71 2.56-4.71 3.91.03 1.35 1.32 3.88 5.24 3.88z" fill="#000"/><circle cx="42.61" cy="11.31" r="1.59" fill="#fff"/><path d="M108.44 30.16l2.53-.49c.6 2.64 2.73 5.51 6.9 5.51 4.33 0 6.9-2.84 7-7.03h-9.78v-2.43h9.57c-.65-3.24-3.11-5.42-6.68-5.42-3.22 0-5.42 1.64-6.22 3.41l-2.56-.52c1.09-2.83 4.17-5.4 8.78-5.4 5.67 0 9.68 4.09 9.68 9.95 0 6.02-4.12 9.95-9.79 9.95-5.64 0-8.72-3.93-9.43-7.53z" fill="#000"/><path d="M94.51 37.27V18.19h14.17v2.51H97.24v16.57h-2.73z" fill="#000"/><path d="M91.09 34.76v2.51H76.29V18.19h13.68v2.51H79.02v4.77h11.89v2.43H79.02v6.87h12.08z" fill="#000"/><path fill-rule="evenodd" clip-rule="evenodd" d="M136.53 22.96c-.24 1.07-.24 2.36-.24 4.94s0 3.87.24 4.94c.84 3.8 3.8 6.76 7.6 7.6 1.07.24 2.36.24 4.94.24h34.07c2.58 0 3.87 0 4.94-.24 3.8-.84 6.76-3.8 7.6-7.6.24-1.07.24-2.36.24-4.94s0-3.87-.24-4.94c-.84-3.79-3.8-6.76-7.6-7.6-1.07-.24-2.36-.24-4.94-.24h-34.07c-2.58 0-3.87 0-4.94.24-3.8.84-6.76 3.8-7.6 7.6zm20.67-2.72h-2.04v5.44h-8.3v-5.44h-2.04v14.31h2.04v-6.99h8.3v6.99h2.04V20.24zm3.11 8.5v-8.5h2.04v8.5c0 2.78 1.31 4.23 4.17 4.23s4.17-1.45 4.17-4.23v-8.5h2.04v8.5c0 3.91-2.06 6.11-6.22 6.11-4.15 0-6.22-2.21-6.22-6.11zm23.09-8.5h-7.54v14.31h6.95c3.33 0 5.17-1.78 5.17-4.44 0-1.72-.94-3.07-2.13-3.52 1.08-.51 1.72-1.39 1.72-2.82 0-1.92-1.15-3.54-4.17-3.54zm-.18 5.46h-5.32v-3.58h5.32c1.47 0 2.27.57 2.27 1.76 0 1.29-.76 1.82-2.27 1.82zm-.74 6.97h-4.58v-5.15h4.64c2.35 0 3.35.78 3.35 2.56 0 1.74-1.1 2.6-3.41 2.6z" fill="#FF5E3A"/></svg>
+    <div class="Esub">онлайн-школа</div>
+  </div>
+  <nav class="Env"><a href="#">О нас</a><a href="#">Курсы</a><a href="#">Преподаватели</a><a href="#" class="ac">Банк заданий</a><a href="#">Справочник</a></nav>
+  <span class="Eph">+7 (995) 222-84-10</span>
+  <div class="Ebs">
+    <button class="Ecart"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6h12l-1.5 9H7.5L6 6zM6 6L5 2H2"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></button>
+    <button class="Elogin">Войти</button>
+  </div>
+</div></header>
+
+<div class="Egrid">
+  <!-- Sidebar -->
+  <aside class="Eside">
+    <div class="Esi ac"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/></svg>Банк заданий</div>
+    <div class="Esi"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h14l-1 10H4z"/><path d="M7 6V4a3 3 0 016 0v2"/></svg>Магазин курсов</div>
+    <div class="Esi"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3h12v14H4z"/><path d="M7 7h6M7 10h4"/></svg>Мои варианты</div>
+    <div class="Esi"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 2"/></svg>Интеллект-карты</div>
+  </aside>
+
+  <!-- Main -->
+  <main class="Emain">
+    <h1 class="Etit">Задания для подготовки к ЕГЭ по информатике</h1>
+
+    <div class="Efr1">
+      <div class="Etog"><button class="ac">ЕГЭ</button><button>ОГЭ</button></div>
+      <select class="Esel"><option>Информатика</option></select>
+      <input class="Esch" placeholder="Поиск">
+      <button class="Ebshow">Показать</button>
+    </div>
+    <div class="Efr2">
+      <span class="Efd">Разделы <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 1l4 4 4-4"/></svg></span>
+      <span class="Efd">Линии <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 1l4 4 4-4"/></svg></span>
+      <span class="Efd">Темы <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 1l4 4 4-4"/></svg></span>
+      <span class="Efd">Часть <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 1l4 4 4-4"/></svg></span>
+      <span class="Efd">Формы ответа <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 1l4 4 4-4"/></svg></span>
+    </div>
+
+    <div class="Eban">🎓 Задания подготовлены экспертами по ЕГЭ и ОГЭ <span class="x">×</span></div>
+
+    <div class="Ecards">
+      <!-- Card 1 -->
+      <div class="Ecard">
+        <div class="Ect"><div class="Ectl"><span class="Ebg num">№ 41641</span><span class="Ebg tag">27 номер</span><span class="Ebg tag">Не выполнено</span></div><span class="Erep"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M7 1v8M7 11.5v.5"/></svg>Сообщить об ошибке</span></div>
+        <div class="Ecat">Обработка последовательностей → Кластеризация</div>
+        <div class="Etxt">
+          <p>Фрагмент звёздного неба спроецирован на плоскость с декартовой системой координат. Учёный решил провести кластеризацию полученных точек, являющихся изображениями звёзд, то есть разбить их множество на N непересекающихся непустых подмножеств (кластеров), таких что точки каждого подмножества лежат внутри прямоугольника со сторонами длиной H и W, причём эти прямоугольники между собой не пересекаются. Стороны прямоугольников не обязательно параллельны координатным осям.</p>
+          <p>Гарантируется, что такое разбиение существует и единственно для заданных размеров прямоугольников.</p>
+          <p>Для каждого файла определите координаты центра каждого кластера, затем вычислите два числа: Px – среднее арифметическое абсцисс центров кластеров, и Py – среднее арифметическое ординат центров кластеров.</p>
+          <p>В ответе запишите четыре числа: в первой строке сначала целая часть абсолютного значения произведения Px ×10000, затем целая часть абсолютного значения произведения Py × 10000 для файла А, во второй строке – аналогичные данные для файла B.</p>
+        </div>
+        <div class="Efiles">
+          <div class="Efile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h10l6 6v10H4z"/><path d="M14 4v6h6"/></svg>27a-qZph.txt</div>
+          <div class="Efile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h10l6 6v10H4z"/><path d="M14 4v6h6"/></svg>27b-M5gU.txt</div>
+        </div>
+        <div class="Etbl"><table><tr><td class="hd"></td><td class="hd">1</td><td class="hd">2</td></tr><tr><td class="hd">1</td><td><input placeholder="Ответ"></td><td><input placeholder="Ответ"></td></tr><tr><td class="hd">2</td><td><input placeholder="Ответ"></td><td><input placeholder="Ответ"></td></tr></table></div>
+        <div class="Ecf">
+          <button class="Ebtn Eblk" disabled>Проверить</button>
+          <span style="flex:1"></span>
+          <button class="Ebtn Eout"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 4v6l4 2"/><circle cx="10" cy="10" r="7"/></svg>В избранное</button>
+          <button class="Ebtn Eout"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg>Решение</button>
+          <button class="Ebtn Eai" onclick="go(0)"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74z"/></svg>Решить с AI</button>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="Ecard">
+        <div class="Ect"><div class="Ectl"><span class="Ebg num">№ 41639</span><span class="Ebg tag">23 номер</span><span class="Ebg tag">Не выполнено</span></div><span class="Erep"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M7 1v8M7 11.5v.5"/></svg>Сообщить об ошибке</span></div>
+        <div class="Ecat">Количество программ → Исполнитель</div>
+        <div class="Etxt">
+          <p>Исполнитель преобразует число, записанное на экране. У исполнителя есть три команды: <strong>A. вычти 3</strong>, <strong>B. вычти 5</strong>, <strong>C. найди целую часть от деления на 2</strong>.</p>
+          <p>Сколько существует программ, для которых при исходном числе 99 результатом является 12, при этом траектория вычислений содержит число 53 и не содержит 36?</p>
+        </div>
+        <div style="margin-bottom:16px"><input class="Esch" style="width:300px;margin:0" placeholder="Ответ" oninput="this.closest('.Ecard').querySelector('.Eblk').disabled=!this.value.trim()"></div>
+        <div class="Ecf">
+          <button class="Ebtn Eblk" disabled>Проверить</button>
+          <span style="flex:1"></span>
+          <button class="Ebtn Eout"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 4v6l4 2"/><circle cx="10" cy="10" r="7"/></svg>В избранное</button>
+          <button class="Ebtn Eout"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg>Решение</button>
+          <button class="Ebtn Eai" onclick="go(1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74z"/></svg>Решить с AI</button>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="Ecard">
+        <div class="Ect"><div class="Ectl"><span class="Ebg num">№ 41636</span><span class="Ebg tag">19 номер</span><span class="Ebg tag">Не выполнено</span></div><span class="Erep"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M7 1v8M7 11.5v.5"/></svg>Сообщить об ошибке</span></div>
+        <div class="Ecat">Теория игр → 1 куча</div>
+        <div class="Etxt">
+          <p>Два игрока, Петя и Ваня, играют в следующую игру. Перед игроками лежит куча камней. Игроки ходят по очереди, первый ход делает Петя. За один ход игрок может убрать 2 камня, убрать 6 камней или уменьшить количество камней в куче в 3 раза (округление до <strong>большего</strong>).</p>
+          <p>Укажите минимальное значение S, когда Петя не может выиграть за один ход, но при этом Ваня может выиграть своим первым ходом при любой игре Пети.</p>
+        </div>
+        <div style="margin-bottom:16px"><input class="Esch" style="width:300px;margin:0" placeholder="Ответ" oninput="this.closest('.Ecard').querySelector('.Eblk').disabled=!this.value.trim()"></div>
+        <div class="Ecf">
+          <button class="Ebtn Eblk" disabled>Проверить</button>
+          <span style="flex:1"></span>
+          <button class="Ebtn Eout"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 4v6l4 2"/><circle cx="10" cy="10" r="7"/></svg>В избранное</button>
+          <button class="Ebtn Eout"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg>Решение</button>
+          <button class="Ebtn Eai" onclick="go(2)"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74z"/></svg>Решить с AI</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer class="Eft"><div class="Efti">
+  <div class="Efcl"><a href="tel:+79952228410">+7 (995) 222-84-10</a><a href="mailto:egehub@mail.ru">egehub@mail.ru</a><div class="Eft2">ЕГЭ HUB — качественная подготовка<br>к экзаменам доступна каждому</div><div class="Eft3">&copy;2026 Все права защищены</div></div>
+  <div class="Efnv">
+    <div class="Efnc"><h4>Обучение</h4><ul><li><a>Все курсы</a></li><li><a>Преподаватели</a></li><li><a>Банк заданий</a></li><li><a>Справочник</a></li></ul></div>
+    <div class="Efnc"><h4>Школа</h4><ul><li><a>О нас</a></li><li><a>Контакты</a></li><li><a>FAQ</a></li><li><a>Статьи</a></li><li><a>Отзывы</a></li></ul></div>
+    <div class="Efnc"><h4>Соцсети</h4><div class="Efsc"><a><svg viewBox="0 0 17 11"><path d="M16.61 1.28C16.73.88 16.61.59 16.05.59h-1.86c-.47 0-.69.25-.91.53 0 0-.94 2.3-2.28 3.8-.43.43-.63.57-.87.57-.12 0-.29-.14-.29-.53V1.28C9.84.53 9.64.59 9.26.59H6.48c-.28 0-.44.21-.44.4 0 .42.63.52.7 1.71v2.58c0 .56-.1.67-.33.67-.63 0-2.17-2.32-3.08-4.97C3.11.35 2.9.59 2.43.59H.57C.03.59 0 .84 0 1.12c0 .46.63 2.77 2.94 5.81C4.48 9.08 6.25 10.08 7.86 10.08c.96 0 1.08-.22 1.08-.59V7.86c0-.53.11-.64.49-.64.28 0 .75.14 1.86 1.2 1.27 1.27 1.48 1.84 2.19 1.84h1.86c.53 0 .8-.27.65-.79-.17-.52-.77-1.28-1.57-2.19-.43-.51-1.08-1.06-1.28-1.34-.28-.36-.2-.51 0-.83 0 0 2.25-3.16 2.48-4.24z"/></svg></a><a><svg viewBox="0 0 16 14"><path d="M.81 6.91c1.58-.87 3.34-1.59 4.99-2.32C8.63 3.39 11.47 2.22 14.34 1.13c.56-.19 1.56-.37 1.66.46-.05 1.17-.28 2.34-.43 3.5-.39 2.56-.83 5.12-1.26 7.67-.23.83-.98 1.18-1.71.74-1.4-.85-2.8-1.68-4.17-2.55-.5-.42-.45-1.05.03-1.49 1.36-1.24 2.82-2.32 4.09-3.66.33-.57-.15-.69-.54-.39-1.75 1.23-3.48 2.5-5.32 3.6-.9.47-1.94.11-2.81-.17-.87-.37-1.95-.64-1.78-1.37.11-.35.59-.69 1.27-.99z"/></svg></a><a><svg viewBox="0 0 16 13"><path d="M14.26 1.24c.69.19 1.23.73 1.41 1.41.34 1.25.33 3.86.33 3.86s0 2.6-.33 3.85a2 2 0 01-1.41 1.41c-1.25.34-6.26.34-6.26.34s-5 0-6.26-.36A2 2 0 01.33 10.34C0 9.1 0 6.5 0 6.5S0 3.89.33 2.64c.19-.69.73-1.22 1.41-1.41C2.99.89 8 .89 8 .89s5.01 0 6.26.36zM10.57 6.5L6.4 9V4l4.18 2.5z"/></svg></a></div></div>
+  </div>
+</div></footer>
+</div>
+
+<!-- ====================== SCREEN 2: MY AI TUTOR ====================== -->
+<div class="screen M" id="s2">
+<div class="Mt">
+ <div class="Mtr">
+  <div class="Mtl">
+    <button class="Mbk" onclick="bk()"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 1L3 6l5 5"/></svg> EGE Hub</button>
+    <div class="Mla"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAGYktHRAAAAAAAAPlDu38AAAAHdElNRQfqAwwRNzdDI5tQAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDI2LTAzLTEyVDE3OjU1OjU1KzAwOjAwsOf1EAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyNi0wMy0xMlQxNzo1NTo1NSswMDowMMG6TawAAAAodEVYdGRhdGU6dGltZXN0YW1wADIwMjYtMDMtMTJUMTc6NTU6NTUrMDA6MDCWr2xzAAAKGElEQVRYw6WXa4xd1XXHf2vvfc65596587THHmwTbALCNqSECqEAIaRNnECiliSlPCo3UVWgKYWkUhKpidIoTau0SqUW9fEliDwganikpB94BBTaJqkDiHcwBtvgF36NZzwzd+55n71XPwytioIKtFta2tLS1lo//dfS0l7CWzw3zRYcqoUxq6iAiIBC8IoEhQAugAe+s7H7VsMib+XRtUdKUh/InGE0BFdbcxZGLtCga4PXxgReNEF/niknugr6NiDeFOCK/SWT0wmHXx4ws6F3StuEGwjhGgMbjaoLHjTocvD8XJRbJmLz0Hzm27ZV7toy8v8D+MSj82y8YJJ/+6eXWX/x+s31YvFXrmkvHxtLbDoe0wRF/UoZ1IP3elRb+QtC+GZbU7dV4N7zR//vAKrKmbfs5JTNk6fP7Vv4x8ErJ7fV8znj4wkXfngjM+et5XgT8I0SWqgbpWl0ITT6xTHRbw4qfDlU7v+1sbcP8M6vPUXaS+iOJuOzry7eMjg6+N0mq9EQ0NqzajTi6k9uJT57mgPLnqaBplbqWmkqPayN3nAy1/s2dKGdV354xfgb5jFv5HzfrbtJDDz3x1t49ZWTVy8vVlcGYzBpjOnEmG7C/NDz0D/vYWw2o28MbaM0DbS10hS6rsj0y71Gzzh+Qvnht8u3qcDnX2TdaEVsZUuR13f62p8dWo82AW092gZoPNFSxgcunOHsq8/h6ZOBPFfaUmkLpclVqcLfd1v9QqtSmgE8fPPEmytw0d1HOHujYd1MNw7OXm+S6GzXjXFpjE0jTBph0pi047BZzROPHGCwe44RMbS50ubgcwiZSrPMtdkyHzp0uGF0zHDnd3a9OcCaGOa8ZZnofdKJrna9BNON/4cljE51SfMaspqlhYInH3yZMd9CJYRMCZmiuRKyMFUPws3TamZm99XcuqP/vwO897559lWGdWt7kyF2N9pussZ2Y1w3wXUTbDdhcm2fCaA6uIgGRRA9uHP20bhpn0kVfAaarwCQK37gL27n62u/VC3KZE/4uy8N3hhg+6MZTuDpgxXemo+b2G5zHYfrRLg0wnQiJlZ12dCPGDx9mCavENU2isz360G1PR3v/U3PUoTME7KAZgEdehi2sVlurr9jKTl3+WTFH/15/40BXlgKlGJ47zljm6yzN0SJS6OOw3UcNnH0xxPOWtthYcc+hkcWECFzzt4y2u98dtOlZ+xtlIfTRJ6OfCBkgZB5yDxSeNphc2a51P7hRyZWd798wwm+ds3s6wGu3FEw3RE2TSRWrPlUFNvzktgSx4644+iNxJx7apfiqcMcefYoRphPIvvVifHuV/K8mf2Vj57L1286eNQ4e08nNq1mLeQeCo/kLSH3VFn98WOLww8uF0OayLweYPMGR6vCQsOvOmO2x86YJLLEr9mWUxLifXPsfPhl1OuhJHafW7d29G+zrMoOHBqwWHm2f349Qc39NjJ7TOWRrEWyFpN7bOmpi3rS+fbGDWV/Tb/03HbV0RWAKx7MeW5fw2Rkuhq4wYicFhlD7AxxZNg0FTEzzHj87hcoh9WeJDGfufCC0767uFQ2Te0Z7r2OD0wLbSGMb4z2ouY+E4CsweQtpmiwZUs1bBDfXNKj/e3PXTONWuG+645jxlI4WcCg0Et9o79pwoosBliVGjZ3PE/ctZO5Q0svdBJ70/6fXnPvs784EkJQDv3HtfRE+J3NXb7+0/28+IOhj4K5N7Jy1JSvJS8abNkQsgYjdTLmuP57dxzZ0ikD9WM15sgipLWMl7le15ZMhQYkCIkIWyaFPT/aw94nj72QdtzNB5479KOtH/wBTd3y0o+vfF03f/WiU4la6HSSp6Mgj9jWY4oaU7SYokXyBque0Vi2doL83tSki9w5EeboQqDIwrYq59frAtoKfAXrxyz5rmM88dD+3Ub4zL4dT/z4XRefQVV5dv/rVb80UL51Rco4wrF7DhZRLndHNQNbttiywVYtrm4ZcYaR2EgqcpXJ9Py4BjPVmqlyyPY2135bQlNAxwrjZc7PvvcS2Wzz/Kp0cufImvNxCxPMyDpu/PSLfOxjT/4SRBGUyV7EaMvP4kofs6XH1i2ubkhDYN2qlJ6xjFizvoP51OhElJoi59J6qBe1GSuzvFRW95RdD7zCq88vobW9bGG+vmPDuonrbWROH5100WM/mSc/plx5ybN8+iO7uPsbs3xx+17u/EKf0cLz1Ld/Mh8Pq3tc3dS2aqBoOGVVomesG9U0CP3Y0HNyeaeV99hVl/zJn/pWzw8e1EN/zJAOT/Lc7btoMo/BRBLMRoL5UGjYVg50y0g36XYiW/d6rrztgUNNOmdp5wMXztxIOl8yMd0HmrmQN+/XspkZiUQ/ccU79Mx01OjxQGyEyMiIFWrXZuGiIIo4IDb0Op4D9x0gn6sQYzDicCbCYmO82RqCbC3b9pOIHtRlfnHleac8IyK7gup+75kdDtphOecbk8iJdMQ/MD6dvOuyy9bLezZNm/b5QOoMiuIV0yrbnOZhJoiCFaJYaWcHzD45Czic65B2uvTTEfppykhsSa3gVLvW61mRylmJut+Kg+Rx0KVI9fjMqu58/939wfp3dOq1p8br+7H1E02SlM96ogqsBUQwHlDd4DT3XlGnVjATwsLO41QLFRhLaFvqoqLwBtsoUadDrxsz1ouZHImZGnWM9az0EttLLb1YZDoxuBghUoM5DvWCMpdVdK3BOEG8IK99g4wgTgu/W5Vz1EIoYHnfIhoEsQYjBlEhtEoVagalUi81LIrhuHH0nKUbWfrOMRJZ+ta6njWkGFIRusbSiw3d2FCjGEAFjIAYQHjVUPg7QtYWIfNUixXZQoYCogbBImIQDEYs1hisEayYlWBBCA3UFZS5UhSBolCqWmk8tKrUQam9UrdQt0rdBuom0DTaBNW7XBzCt5oqbAlBtpfzwRRtDVTEGmNYSS6vaaav+0b+l08ICm2A2kMkihPFecUJGFGsKJaV9S2I4gxYkfutMf9gRzd+No8Nj2sbbKjZ1FTLI8XgGErA4HASYcVisTgMDiHCYjFYMVgRjMoKqhgEQZTX3YSVHQMFgVkx3G4ivkKr++w3/vrPeGRHvrym3/w7jexwoie7cTliTJE0IWuNq42LgnQSkTQxpInQSYQkgSSGOBaiCKIYXKQYq4hoq2jtg5aIltLRocb6vIHvusj8pfT0NlPJCbvaIh/+/UM8eOsx3v0bU+St4abLp+1Cu3/j0cPHNu7ZO9cd67vpXhqn3bjrRpJunNpIEmejSAwmmNapCVYMVk2wgkhDFXLJmmWGOmQ4sTpqVr/TlnEqLx8dPXH49H9ZH5JUOff21bzwB/O4B2/dAMBpky8RF33uf/ygXzM12Ls4n+1dXKrxPlAXUCcxPgk0NtBxhkgUG5RIV2ptUZwIpgFKCLkgheCXoT4B6mDqmVWc9v6Y3a9k/91X/wnosz6J8te76AAAAABJRU5ErkJggg==" alt=""><span><span class="Lmy">my</span><span class="Lai">AI</span><span class="Ltu">Tutor</span></span></div>
+    <div class="Mna">
+      <button class="Mnarr">&#8249;</button>
+      <div class="Mnc"><span class="Mncur" id="mc">1</span> / 217</div>
+      <button class="Mnarr">&#8250;</button>
+    </div>
+  </div>
+  <div class="Mtc">
+    <span class="Mtp" id="mtp">Тип 27</span>
+    <span class="Mtt" id="mtt">Обработка целочисленных данных. Кластеризация</span>
+    <span class="Mdf"><svg viewBox="0 0 12 12"><path d="M6 .5l1.5 3.5h4l-3 2.5 1 4L6 8 2.5 10.5l1-4L.5 4h4z"/></svg>Средняя</span>
+    <svg width="16" height="16" fill="none" stroke="#90a1b9" stroke-width="1.5" stroke-linecap="round" style="opacity:.5"><path d="M4 6l4 4 4-4"/></svg>
+  </div>
+  <div class="Mtr2">
+    <button class="Mib"><svg fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v1M8 9v2"/></svg></button>
+    <button class="Mib"><svg fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 3L8 8l-4-2"/><path d="M15 3l-5 12-3-7-7-3z"/></svg></button>
+    <button class="Mib"><svg fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v4M8 14v-4M2 8h4M14 8h-4"/></svg></button>
+    <div class="Mav">Г</div>
+  </div>
+ </div>
+ <div class="Mtb">
+  <button class="Mtbi ac"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M5 7h6M5 9.5h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Условие</button>
+  <button class="Mtbi"><svg viewBox="0 0 16 16" fill="none"><path d="M5 3l-3 5 3 5M11 3l3 5-3 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Python</button>
+  <button class="Mtbi"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 5v3l2 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Решение</button>
+  <button class="Mtbi"><svg viewBox="0 0 16 16" fill="none"><path d="M3 3h10v10H3z" stroke="currentColor" stroke-width="1.2"/><path d="M6 6h4M6 8.5h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Файл данных</button>
+  <button class="Mtbi"><svg viewBox="0 0 16 16" fill="none"><path d="M3 4h10v7H6l-3 2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>Чат</button>
+  <button class="Mtbi"><svg viewBox="0 0 16 16" fill="none"><path d="M3 4l5 4-5 4z" fill="currentColor" opacity=".5"/></svg>Видео</button>
+  <button class="Mtbi">Частые вопросы</button>
+  <button class="Mtbi">Упражнения</button>
+ </div>
+</div>
+
+<div class="Mbd">
+  <div class="Mpn"><div class="Mlb">УСЛОВИЕ</div><div class="Mcn">
+    <div class="Mcnh"><div class="Mcnt" id="mct">Задача 1</div><div class="Mcna"><button class="Mcnab">☐ Разобрана</button><button class="Mcnab">☆ Избранное</button><button class="Mcnab">↻ Повторить</button></div></div>
+    <div class="Mctx" id="mcx">Фрагмент звёздного неба спроецирован на плоскость с декартовой системой координат. Учёный решил провести кластеризацию полученных точек, являющихся изображениями звёзд, то есть разбить их множество на N непересекающихся непустых подмножеств (кластеров), таких что точки каждого подмножества лежат внутри прямоугольника со сторонами длиной H и W.<br><br>Для каждого файла определите координаты центра каждого кластера, затем вычислите два числа: Px — среднее арифметическое абсцисс центров кластеров, и Py — среднее арифметическое ординат центров кластеров.</div>
+    <div class="Mans"><input class="Mainp" placeholder="Введите число..."><div class="Mans-row"><button class="Mchk"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7l3 3 5-6"/></svg>Проверить</button><button class="Msho"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><circle cx="7" cy="7" r="2"/></svg>Показать ответ</button></div></div>
+  </div></div>
+  <div class="Mpn"><div class="Mlb">РЕШЕНИЕ</div><div class="Msol"><div class="Msols">Решение скрыто по умолчанию, открой по кнопке.</div><button class="Msolb">Показать решение</button></div></div>
+  <div class="Mpn Med"><div class="Mlb">PYTHON</div>
+    <div class="Medh"><div style="display:flex;align-items:center;gap:16px"><div class="Medt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 5l-5 7 5 7M16 5l5 7-5 7"/></svg>Python Editor</div><div class="Medg">Python готов</div></div>
+      <div class="Medtb">
+        <button class="Medb"><svg fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="3" width="10" height="8" rx="1"/><path d="M4 7l2 1.5-2 1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10h2" stroke-linecap="round"/></svg></button>
+        <button class="Medb"><svg fill="none" stroke="currentColor" stroke-width="1.3"><path d="M7 3v4M4 3h6M7 11v-4M4 11h6" stroke-linecap="round"/></svg></button>
+        <button class="Medb"><svg fill="none" stroke="currentColor" stroke-width="1.3"><rect x="5" y="5" width="6" height="6" rx="1"/><path d="M3 9V3h6"/></svg></button>
+        <button class="Mrun"><svg width="14" height="14" fill="currentColor"><path d="M4 2l9 5-9 5z"/></svg></button>
+        <button class="Medb"><svg fill="none" stroke="currentColor" stroke-width="1.3"><path d="M7 2v7M4 6l3 3 3-3M2 11h10" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="Mslv"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.5 4.5H14l-3.5 2.7 1.3 4.3L8 10l-3.8 2.5 1.3-4.3L2 5.5h4.5z"/></svg>Решение</button>
+      </div>
+    </div>
+    <div class="Medy">
+      <div class="Mfs"><div class="Mfst">ФАЙЛЫ <span>+ &minus; &lt;</span></div><div class="Mfi ac"><div class="Mfic">Py</div>program.py</div></div>
+      <div class="Mco" id="mco"><div class="Mcl"><span class="Mln">1</span><span><span class="fn">print</span><span class="pr">(</span><span class="fn">open</span><span class="pr">(</span><span class="st">'27a.txt'</span><span class="pr">)</span>.readline<span class="pr">()</span><span class="pr">)</span></span></div><div class="Mcl"><span class="Mln">2</span></div><div class="Mcl"><span class="Mln">3</span></div><div class="Mcl"><span class="Mln">4</span></div><div class="Mcl"><span class="Mln">5</span></div><div class="Mcl"><span class="Mln">6</span></div><div class="Mcl"><span class="Mln">7</span></div></div>
+    </div>
+  </div>
+  <!-- Результат выполнения -->
+  <div class="Mpn" style="flex:none"><div style="padding:12px 16px;font-size:14px;font-weight:500;color:var(--fg);border-bottom:1px solid var(--brd)">Результат выполнения</div><div style="padding:16px;font-size:14px;color:var(--mut)">Нажмите Запустить для выполнения кода</div></div>
+</div>
+
+<div class="Mcb">
+  <div class="Mc5">5</div>
+  <button class="Mcbi"><svg fill="none" stroke="currentColor" stroke-width="1.3"><path d="M13 10.5V12a1 1 0 01-1 1H4a1 1 0 01-1-1v-1.5M8 3v7M5.5 7.5L8 10l2.5-2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="Mcbi"><svg fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 8h8M4 5h3M9 5h3M4 11h5" stroke-linecap="round"/></svg></button>
+  <button class="Mcbi"><svg fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 2l5 5M14 2l-5 5M2 14l5-5M14 14l-5-5" stroke-linecap="round"/></svg></button>
+  <input class="Mcinp" placeholder="Задай вопрос или скинь задачу — myAITutor решит и объяснит">
+  <button class="Mcbi"><svg fill="none" stroke="currentColor" stroke-width="1.3"><path d="M8 2v10M8 2l-3 3M8 2l3 3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="Mcbi"><svg fill="none" stroke="currentColor" stroke-width="1.3"><path d="M8 13V3M8 3l3 3M8 3L5 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+</div>
+
+<div class="Mwid"><svg width="24" height="24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M4 5h16v10H8l-4 3z"/></svg></div>
+</div>
+
+<script>
+const T=[
+  {tp:'Тип 27',tt:'Обработка целочисленных данных. Кластеризация',ct:'Задача 1',tx:'Фрагмент звёздного неба спроецирован на плоскость с декартовой системой координат. Учёный решил провести кластеризацию полученных точек, являющихся изображениями звёзд, то есть разбить их множество на N непересекающихся непустых подмножеств (кластеров).<br><br>Для каждого файла определите координаты центра каждого кластера, затем вычислите два числа: Px — среднее арифметическое абсцисс центров кластеров, и Py — среднее арифметическое ординат центров кластеров.',co:'<span class="fn">print</span><span class="pr">(</span><span class="fn">open</span><span class="pr">(</span><span class="st">\'27a.txt\'</span><span class="pr">)</span>.readline<span class="pr">()</span><span class="pr">)</span>'},
+  {tp:'Тип 23',tt:'Количество программ. Исполнитель',ct:'Задача 2',tx:'Исполнитель преобразует число на экране. Команды: <strong>A. вычти 3</strong>, <strong>B. вычти 5</strong>, <strong>C. целая часть от деления на 2</strong>.<br><br>Сколько программ преобразуют 99 в 12, проходя через 53 и не проходя через 36?',co:'<span class="cm"># Решение задачи 23</span>'},
+  {tp:'Тип 19',tt:'Теория игр. 1 куча',ct:'Задача 3',tx:'Петя и Ваня играют. Куча камней, ходят по очереди. Можно убрать 2, убрать 6 или делить на 3 (до <strong>большего</strong>). Проигрывает тот, у кого не более 11.<br><br>Минимальное S: Петя не выиграет за 1 ход, но Ваня выиграет первым ходом?',co:'<span class="cm"># Решение задачи 19</span>'}
+];
+function go(i){const t=T[i];document.getElementById('mtp').textContent=t.tp;document.getElementById('mtt').textContent=t.tt;document.getElementById('mct').textContent=t.ct;document.getElementById('mcx').innerHTML=t.tx;let c='<div class="Mcl"><span class="Mln">1</span><span>'+t.co+'</span></div>';for(let j=2;j<=7;j++)c+='<div class="Mcl"><span class="Mln">'+j+'</span></div>';document.getElementById('mco').innerHTML=c;const a=document.getElementById('s1'),b=document.getElementById('s2');a.classList.add('fo');setTimeout(()=>{a.classList.remove('on','fo');b.classList.add('on','on2','fi');scrollTo(0,0);setTimeout(()=>b.classList.remove('fi'),350)},300)}
+function bk(){const a=document.getElementById('s1'),b=document.getElementById('s2');b.classList.add('fo');setTimeout(()=>{b.classList.remove('on','on2','fo');a.classList.add('on','fi');scrollTo(0,0);setTimeout(()=>a.classList.remove('fi'),350)},300)}
+</script>
+</body>
+</html>
