@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EGE Hub × My AI Tutor — Демо интеграции</title>
+<title>EGE Hub — Банк заданий</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:16px;-webkit-font-smoothing:antialiased;font-family:'Inter',system-ui,-apple-system,sans-serif}
@@ -204,8 +204,10 @@ ul{list-style:none}
 .Mcsnd{width:32px;height:32px;border-radius:8px;background:var(--pri);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}.Mcsnd:hover{opacity:.85}
 
 /* Chat widget */
-.Mwid{position:fixed;bottom:20px;right:20px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#7f22fe,#a855f7);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(127,34,254,.4);cursor:pointer;z-index:200;display:none}
-.M .Mwid{display:flex}
+.Mpby{position:fixed;bottom:12px;right:16px;font-size:10px;color:rgba(255,255,255,.25);z-index:200;display:none;letter-spacing:.02em}
+.M .Mpby{display:block}
+.Mpby a{color:inherit;text-decoration:none;transition:color .2s}
+.Mpby a:hover{color:rgba(255,255,255,.5)}
 </style>
 </head>
 <body>
@@ -333,8 +335,7 @@ ul{list-style:none}
 <div class="Mt">
  <div class="Mtr">
   <div class="Mtl">
-    <button class="Mbk" onclick="bk()"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 1L3 6l5 5"/></svg> EGE Hub</button>
-    <div class="Mla"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAGYktHRAAAAAAAAPlDu38AAAAHdElNRQfqAwwRNzdDI5tQAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDI2LTAzLTEyVDE3OjU1OjU1KzAwOjAwsOf1EAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyNi0wMy0xMlQxNzo1NTo1NSswMDowMMG6TawAAAAodEVYdGRhdGU6dGltZXN0YW1wADIwMjYtMDMtMTJUMTc6NTU6NTUrMDA6MDCWr2xzAAAKGElEQVRYw6WXa4xd1XXHf2vvfc65596587THHmwTbALCNqSECqEAIaRNnECiliSlPCo3UVWgKYWkUhKpidIoTau0SqUW9fEliDwganikpB94BBTaJqkDiHcwBtvgF36NZzwzd+55n71XPwytioIKtFta2tLS1lo//dfS0l7CWzw3zRYcqoUxq6iAiIBC8IoEhQAugAe+s7H7VsMib+XRtUdKUh/InGE0BFdbcxZGLtCga4PXxgReNEF/niknugr6NiDeFOCK/SWT0wmHXx4ws6F3StuEGwjhGgMbjaoLHjTocvD8XJRbJmLz0Hzm27ZV7toy8v8D+MSj82y8YJJ/+6eXWX/x+s31YvFXrmkvHxtLbDoe0wRF/UoZ1IP3elRb+QtC+GZbU7dV4N7zR//vAKrKmbfs5JTNk6fP7Vv4x8ErJ7fV8znj4wkXfngjM+et5XgT8I0SWqgbpWl0ITT6xTHRbw4qfDlU7v+1sbcP8M6vPUXaS+iOJuOzry7eMjg6+N0mq9EQ0NqzajTi6k9uJT57mgPLnqaBplbqWmkqPayN3nAy1/s2dKGdV354xfgb5jFv5HzfrbtJDDz3x1t49ZWTVy8vVlcGYzBpjOnEmG7C/NDz0D/vYWw2o28MbaM0DbS10hS6rsj0y71Gzzh+Qvnht8u3qcDnX2TdaEVsZUuR13f62p8dWo82AW092gZoPNFSxgcunOHsq8/h6ZOBPFfaUmkLpclVqcLfd1v9QqtSmgE8fPPEmytw0d1HOHujYd1MNw7OXm+S6GzXjXFpjE0jTBph0pi047BZzROPHGCwe44RMbS50ubgcwiZSrPMtdkyHzp0uGF0zHDnd3a9OcCaGOa8ZZnofdKJrna9BNON/4cljE51SfMaspqlhYInH3yZMd9CJYRMCZmiuRKyMFUPws3TamZm99XcuqP/vwO897559lWGdWt7kyF2N9pussZ2Y1w3wXUTbDdhcm2fCaA6uIgGRRA9uHP20bhpn0kVfAaarwCQK37gL27n62u/VC3KZE/4uy8N3hhg+6MZTuDpgxXemo+b2G5zHYfrRLg0wnQiJlZ12dCPGDx9mCavENU2isz360G1PR3v/U3PUoTME7KAZgEdehi2sVlurr9jKTl3+WTFH/15/40BXlgKlGJ47zljm6yzN0SJS6OOw3UcNnH0xxPOWtthYcc+hkcWECFzzt4y2u98dtOlZ+xtlIfTRJ6OfCBkgZB5yDxSeNphc2a51P7hRyZWd798wwm+ds3s6wGu3FEw3RE2TSRWrPlUFNvzktgSx4644+iNxJx7apfiqcMcefYoRphPIvvVifHuV/K8mf2Vj57L1286eNQ4e08nNq1mLeQeCo/kLSH3VFn98WOLww8uF0OayLweYPMGR6vCQsOvOmO2x86YJLLEr9mWUxLifXPsfPhl1OuhJHafW7d29G+zrMoOHBqwWHm2f349Qc39NjJ7TOWRrEWyFpN7bOmpi3rS+fbGDWV/Tb/03HbV0RWAKx7MeW5fw2Rkuhq4wYicFhlD7AxxZNg0FTEzzHj87hcoh9WeJDGfufCC0767uFQ2Te0Z7r2OD0wLbSGMb4z2ouY+E4CsweQtpmiwZUs1bBDfXNKj/e3PXTONWuG+645jxlI4WcCg0Et9o79pwoosBliVGjZ3PE/ctZO5Q0svdBJ70/6fXnPvs784EkJQDv3HtfRE+J3NXb7+0/28+IOhj4K5N7Jy1JSvJS8abNkQsgYjdTLmuP57dxzZ0ikD9WM15sgipLWMl7le15ZMhQYkCIkIWyaFPT/aw94nj72QdtzNB5479KOtH/wBTd3y0o+vfF03f/WiU4la6HSSp6Mgj9jWY4oaU7SYokXyBque0Vi2doL83tSki9w5EeboQqDIwrYq59frAtoKfAXrxyz5rmM88dD+3Ub4zL4dT/z4XRefQVV5dv/rVb80UL51Rco4wrF7DhZRLndHNQNbttiywVYtrm4ZcYaR2EgqcpXJ9Py4BjPVmqlyyPY2135bQlNAxwrjZc7PvvcS2Wzz/Kp0cufImvNxCxPMyDpu/PSLfOxjT/4SRBGUyV7EaMvP4kofs6XH1i2ubkhDYN2qlJ6xjFizvoP51OhElJoi59J6qBe1GSuzvFRW95RdD7zCq88vobW9bGG+vmPDuonrbWROH5100WM/mSc/plx5ybN8+iO7uPsbs3xx+17u/EKf0cLz1Ld/Mh8Pq3tc3dS2aqBoOGVVomesG9U0CP3Y0HNyeaeV99hVl/zJn/pWzw8e1EN/zJAOT/Lc7btoMo/BRBLMRoL5UGjYVg50y0g36XYiW/d6rrztgUNNOmdp5wMXztxIOl8yMd0HmrmQN+/XspkZiUQ/ccU79Mx01OjxQGyEyMiIFWrXZuGiIIo4IDb0Op4D9x0gn6sQYzDicCbCYmO82RqCbC3b9pOIHtRlfnHleac8IyK7gup+75kdDtphOecbk8iJdMQ/MD6dvOuyy9bLezZNm/b5QOoMiuIV0yrbnOZhJoiCFaJYaWcHzD45Czic65B2uvTTEfppykhsSa3gVLvW61mRylmJut+Kg+Rx0KVI9fjMqu58/939wfp3dOq1p8br+7H1E02SlM96ogqsBUQwHlDd4DT3XlGnVjATwsLO41QLFRhLaFvqoqLwBtsoUadDrxsz1ouZHImZGnWM9az0EttLLb1YZDoxuBghUoM5DvWCMpdVdK3BOEG8IK99g4wgTgu/W5Vz1EIoYHnfIhoEsQYjBlEhtEoVagalUi81LIrhuHH0nKUbWfrOMRJZ+ta6njWkGFIRusbSiw3d2FCjGEAFjIAYQHjVUPg7QtYWIfNUixXZQoYCogbBImIQDEYs1hisEayYlWBBCA3UFZS5UhSBolCqWmk8tKrUQam9UrdQt0rdBuom0DTaBNW7XBzCt5oqbAlBtpfzwRRtDVTEGmNYSS6vaaav+0b+l08ICm2A2kMkihPFecUJGFGsKJaV9S2I4gxYkfutMf9gRzd+No8Nj2sbbKjZ1FTLI8XgGErA4HASYcVisTgMDiHCYjFYMVgRjMoKqhgEQZTX3YSVHQMFgVkx3G4ivkKr++w3/vrPeGRHvrym3/w7jexwoie7cTliTJE0IWuNq42LgnQSkTQxpInQSYQkgSSGOBaiCKIYXKQYq4hoq2jtg5aIltLRocb6vIHvusj8pfT0NlPJCbvaIh/+/UM8eOsx3v0bU+St4abLp+1Cu3/j0cPHNu7ZO9cd67vpXhqn3bjrRpJunNpIEmejSAwmmNapCVYMVk2wgkhDFXLJmmWGOmQ4sTpqVr/TlnEqLx8dPXH49H9ZH5JUOff21bzwB/O4B2/dAMBpky8RF33uf/ygXzM12Ls4n+1dXKrxPlAXUCcxPgk0NtBxhkgUG5RIV2ptUZwIpgFKCLkgheCXoT4B6mDqmVWc9v6Y3a9k/91X/wnosz6J8te76AAAAABJRU5ErkJggg==" alt=""><span><span class="Lmy">my</span><span class="Lai">AI</span><span class="Ltu">Tutor</span></span></div>
+    <button class="Mbk" onclick="bk()"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 1L3 6l5 5"/></svg> Назад</button>
     <div class="Mna">
       <button class="Mnarr">&#8249;</button>
       <div class="Mnc"><span class="Mncur" id="mc">1</span> / 217</div>
@@ -398,12 +399,12 @@ ul{list-style:none}
   <button class="Mcbi"><svg fill="none" stroke="currentColor" stroke-width="1.3"><path d="M13 10.5V12a1 1 0 01-1 1H4a1 1 0 01-1-1v-1.5M8 3v7M5.5 7.5L8 10l2.5-2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <button class="Mcbi"><svg fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 8h8M4 5h3M9 5h3M4 11h5" stroke-linecap="round"/></svg></button>
   <button class="Mcbi"><svg fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 2l5 5M14 2l-5 5M2 14l5-5M14 14l-5-5" stroke-linecap="round"/></svg></button>
-  <input class="Mcinp" placeholder="Задай вопрос или скинь задачу — myAITutor решит и объяснит">
+  <input class="Mcinp" placeholder="Задай вопрос или скинь задачу — AI решит и объяснит">
   <button class="Mcbi"><svg fill="none" stroke="currentColor" stroke-width="1.3"><path d="M8 2v10M8 2l-3 3M8 2l3 3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <button class="Mcbi"><svg fill="none" stroke="currentColor" stroke-width="1.3"><path d="M8 13V3M8 3l3 3M8 3L5 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 </div>
 
-<div class="Mwid"><svg width="24" height="24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M4 5h16v10H8l-4 3z"/></svg></div>
+<div class="Mpby"><a href="https://myaitutor.ru" target="_blank">Powered by MyAITutor</a></div>
 </div>
 
 <script>
